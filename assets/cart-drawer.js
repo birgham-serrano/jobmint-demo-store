@@ -124,3 +124,13 @@ class CartDrawerItems extends CartItems {
 }
 
 customElements.define('cart-drawer-items', CartDrawerItems);
+
+
+setInterval(function() {
+  var upsellId = document.querySelector('.cart-drawer__upsell-product').getAttribute('product-id');
+  if (document.querySelector('.cart-item[product-id="' + upsellId + '"]')) {
+    document.querySelector('.cart-drawer__upsell').classList.add('hide');
+  } else {
+    document.querySelector('.cart-drawer__upsell').classList.remove('hide');
+  }
+}, 100);

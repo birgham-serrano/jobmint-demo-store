@@ -12,7 +12,10 @@
     visibility: hidden;
   }
 </style>
-
+{% unless template contains "product" %}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{% endunless %}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
@@ -110,7 +113,7 @@
 
                   <tbody role="rowgroup">
                     {%- for item in cart.items -%}
-                      <tr id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item" role="row">
+                      <tr id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item" role="row" product-id="{{ item.product.id }}">
                         <td class="cart-item__media" role="cell" headers="CartDrawer-ColumnProductImage">
                           {% if item.image %}
                             {% comment %} Leave empty space due to a:empty CSS display: none rule {% endcomment %}
@@ -350,7 +353,29 @@
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
+        {%- if settings.cart_drawer_upsell_product != blank -%}
+          {% assign upsellProduct = settings.cart_drawer_upsell_product %}
+          <div class="cart-drawer__upsell">
+          <div class="cart-drawer__upsell-title">Frequently Bought With</div>
+            <div class="cart-drawer__upsell-product" product-id="{{ upsellProduct.id }}">
+              <img
+                  class="cart-item__image"
+                  src="{{ upsellProduct.featured_image | image_url: width: 300 }}"
+                  alt="{{ upsellProduct.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width="100"
+                  height="{{ 100 | divided_by: upsellProduct.featured_image.aspect_ratio | ceil }}"
+               >
+              <div class="cart-drawer__upsell-right">
+                <div class="cart-drawer__product-title">{{ upsellProduct.title }}</div>
+                <div class="cart-drawer__product-price">{{ upsellProduct.price | money }}</div>
+                {% render 'buy-buttons', product: upsellProduct %}
+              </div>
+            </div>
+          </div>
+          {%- endif -%}
       <div class="drawer__footer">
+        
         {%- if settings.show_cart_note -%}
           <details id="Details-CartDrawer">
             <summary>
