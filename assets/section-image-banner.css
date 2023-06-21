@@ -436,3 +436,31 @@
 .banner__box > * + .banner__buttons {
   margin-top: 2rem;
 }
+
+.banner__media.media.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner__media.media.video-container video {
+  position: static;
+  height: auto;
+}
+
+@media screen and (min-width: 769px) {
+  .banner__media.media.video-container.mobile:not(.desktop) {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .banner__media.media.video-container.desktop:not(.mobile) {
+    display: none;
+  }
+
+  .banner__media.media.video-container.mobile video {
+    height: 100%;
+    width: auto;
+  }
+}
