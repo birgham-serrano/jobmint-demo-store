@@ -33,6 +33,24 @@
   id="Banner-{{ section.id }}"
   class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}"
 >
+  {%- if section.settings.show_video -%}
+   {%- if section.settings.desktop_video != blank -%}
+     <div class="banner__media media video-container desktop  {% if section.settings.mobile_video == blank %}mobile{% endif %}">
+        <video class="video"  autoplay loop muted>
+          <source data-src="{{ section.settings.desktop_video.sources[1].url}}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+     </div>
+  {%- endif -%}
+   {%- if section.settings.mobile_video != blank -%}
+     <div class="banner__media media video-container mobile">
+        <video class="video"  autoplay loop muted>
+          <source data-src="{{ section.settings.mobile_video.sources[1].url}}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+     </div>
+  {%- endif -%} 
+  {% else %} 
   {%- if section.settings.image != blank -%}
     <div class="banner__media media{% if section.settings.image == blank and section.settings.image_2 == blank %} placeholder{% endif %}{% if section.settings.image_2 != blank %} banner__media-half{% endif %}">
       {%- liquid
@@ -93,6 +111,7 @@
       }}
     </div>
   {%- endif -%}
+  {% endif %}   
   <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width">
     <div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
       {%- for block in section.blocks -%}
@@ -140,7 +159,7 @@
     </div>
   </div>
 </div>
-
+{{ 'image-banner.js' | asset_url | script_tag }} 
 {% schema %}
 {
   "name": "t:sections.image-banner.name",
@@ -194,6 +213,31 @@
       "default": "medium",
       "label": "t:sections.image-banner.settings.image_height.label",
       "info": "t:sections.image-banner.settings.image_height.info"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+
+    {
+       "type": "video",
+      "id": "desktop_video",
+      "label": "Desktop Video"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video",
+      "default": false,
+      "label": "Show Video"
+    },
+    {
+      "type": "header",
+      "content": "Banner Settings"
     },
     {
       "type": "select",
